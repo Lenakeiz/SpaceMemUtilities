@@ -1,0 +1,16 @@
+{
+    "name": "SpaceMem.Patterns.State.Examples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b59143a95f9ef7745a989193b049cdf2"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
