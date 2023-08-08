@@ -1,0 +1,19 @@
+{
+  "name": "com.spacemem.utilities",
+  "version": "0.1.0",
+  "displayName": "SpaceMem Utilities",
+  "unity": "2021.3",
+  "documentationUrl": "",
+  "changelogUrl": "",
+  "licensesUrl": "",
+  "keywords": [
+    "utilities",
+    "patterns"
+  ],
+  "author": {
+    "name": "Lenakeiz",
+    "email": "andrea.castegnaro@outlook.com",
+    "url": ""
+  },
+  "description": "a collection of game design patters commonly used in game development"
+}
