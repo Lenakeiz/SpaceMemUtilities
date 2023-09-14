@@ -15,5 +15,8 @@
     "email": "andrea.castegnaro@outlook.com",
     "url": ""
   },
-  "description": "a collection of game design patters commonly used in game development"
+  "description": "a collection of game design patterns and useful tools I use in XR game development",
+  "dependencies": {
+    "com.unity.textmeshpro": "3.0.6"
+  }
 }
