@@ -45,7 +45,9 @@ namespace SpaceMem.Patterns.Observer
         {
             if (events.ContainsKey(eventName))
             {
+#if UNITY_EDITOR
                 Debug.Log("Invoking event: " + eventName);
+#endif
                 events[eventName]?.Invoke(value);
             }
         }
