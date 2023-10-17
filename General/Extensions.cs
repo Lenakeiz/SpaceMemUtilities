@@ -66,6 +66,31 @@ public static class SpaceMemoryExtensions
         }
     }
 
+    public static void ShakeAndCollapse(this Transform transformToCollapse, MonoBehaviour behaviour, float duration, float shakeIntensity, float collapseSpeed)
+    {
+        behaviour.StartCoroutine(ShakeAndCollapseRoutine(transformToCollapse, duration, shakeIntensity, collapseSpeed));
+    }
+
+    private static IEnumerator ShakeAndCollapseRoutine(Transform transformToCollapse, float duration, float shakeIntensity, float collapseSpeed)
+    {
+        float elapsedTime = 0f;
+        Vector3 originalPosition = transformToCollapse.localPosition;
+
+        while (elapsedTime < duration)
+        {
+            // Shake along x and z axes
+            float offsetX = Random.Range(-shakeIntensity, shakeIntensity);
+            float offsetZ = Random.Range(-shakeIntensity, shakeIntensity);
+
+            transformToCollapse.localPosition = originalPosition + new Vector3(offsetX, -collapseSpeed * elapsedTime, offsetZ);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transformToCollapse.localPosition = originalPosition + new Vector3(0, -collapseSpeed * duration, 0);
+    }
+
     public static bool IsPositionedAndFacingTowards(this Transform transform, Vector3 targetPosition, Vector3 targetDirection, float positionAllowance, float directionAllowanceDegrees)
     {
         // Get the object's current position (ignoring y)
