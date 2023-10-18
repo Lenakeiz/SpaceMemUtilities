@@ -66,29 +66,39 @@ public static class SpaceMemoryExtensions
         }
     }
 
-    public static void ShakeAndCollapse(this Transform transformToCollapse, MonoBehaviour behaviour, float duration, float shakeIntensity, float collapseSpeed)
+    public static void ShakeAndCollapse(this Transform transformToCollapse, MonoBehaviour behaviour, float duration, float shakeAmount, float verticalDisplacement, AnimationCurve shakeCurve, AnimationCurve collapseCurve)
     {
-        behaviour.StartCoroutine(ShakeAndCollapseRoutine(transformToCollapse, duration, shakeIntensity, collapseSpeed));
+        behaviour.StartCoroutine(ShakeAndCollapseRoutine(transformToCollapse, duration, shakeAmount, verticalDisplacement, shakeCurve, collapseCurve));
     }
 
-    private static IEnumerator ShakeAndCollapseRoutine(Transform transformToCollapse, float duration, float shakeIntensity, float collapseSpeed)
+    private static IEnumerator ShakeAndCollapseRoutine(Transform transformToCollapse, float duration, float shakeAmount, float verticalDisplacement, AnimationCurve shakeCurve, AnimationCurve collapseCurve)
     {
         float elapsedTime = 0f;
         Vector3 originalPosition = transformToCollapse.localPosition;
 
         while (elapsedTime < duration)
         {
-            // Shake along x and z axes
-            float offsetX = Random.Range(-shakeIntensity, shakeIntensity);
-            float offsetZ = Random.Range(-shakeIntensity, shakeIntensity);
 
-            transformToCollapse.localPosition = originalPosition + new Vector3(offsetX, -collapseSpeed * elapsedTime, offsetZ);
+            float timePercent = elapsedTime / duration;
+
+            // Sample the shake intensity and collapse amount from the animation curves
+            float currentShakeIntensity = shakeAmount * shakeCurve.Evaluate(timePercent);
+            float targetCollapseDisplacement = verticalDisplacement * collapseCurve.Evaluate(timePercent);
+
+            // Shake around the original position in the xz plane
+            float offsetX = originalPosition.x + Random.Range(-currentShakeIntensity, currentShakeIntensity);
+            float offsetZ = originalPosition.z + Random.Range(-currentShakeIntensity, currentShakeIntensity);
+
+            // Update the position based on the shake and collapse
+            transformToCollapse.localPosition = new Vector3(offsetX, originalPosition.y - targetCollapseDisplacement, offsetZ);
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        transformToCollapse.localPosition = originalPosition + new Vector3(0, -collapseSpeed * duration, 0);
+        // Ensure the object returns to its original x and z position and descends by the specified verticalDisplacement in the y-axis
+        transformToCollapse.localPosition = new Vector3(originalPosition.x, originalPosition.y - verticalDisplacement, originalPosition.z);
+
     }
 
     public static bool IsPositionedAndFacingTowards(this Transform transform, Vector3 targetPosition, Vector3 targetDirection, float positionAllowance, float directionAllowanceDegrees)
