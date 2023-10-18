@@ -64,6 +64,9 @@ public static class SpaceMemoryExtensions
 
             yield return null;
         }
+
+        // Ensure the final position is the desired end position
+        transformToMove.position = end;
     }
 
     public static void ShakeAndCollapse(this Transform transformToCollapse, MonoBehaviour behaviour, float duration, float shakeAmount, float verticalDisplacement, AnimationCurve shakeCurve, AnimationCurve collapseCurve)
