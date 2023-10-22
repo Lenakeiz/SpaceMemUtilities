@@ -1,0 +1,16 @@
+{
+    "name": "SpaceMem.Localizer.Examples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6dc233e669a271741a38c1a89ebca40c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

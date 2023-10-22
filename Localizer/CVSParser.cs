@@ -2,31 +2,44 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
 namespace SpaceMem.Localizer
 {
-
-    public class MessageData
+    public interface IMessageData
     {
-        public string Header { get; set; }
-        public string Body { get; set; }
-
-        public float Duration { get; set; }
-
-        public MessageData(string header, string body, float duration)
-        {
-            Header = header;
-            Body = body;
-            Duration = duration;
-        }
+        string[] SerializeMessageData();
+        void DeserializeMessageData(string[] fields);
+        string[] GetHeaderFields();
+        string ToString();
     }
-    public class CSVParser
+
+    public interface IMessageDataFactory
     {
-        public static Dictionary<string, MessageData> ReadCSV(string fullpathfile)
+        IMessageData CreateInstance();
+    }
+
+    public interface IMessageIDProvide
+    {
+        string GetID(string key);
+    }
+
+    public class CSVParser<T> where T : IMessageData
+    {
+        private readonly string _separator;
+        private readonly IMessageDataFactory _factory;
+
+        public CSVParser(IMessageDataFactory factory, string separator = ";;")
         {
-            Dictionary<string, MessageData> csvData = new Dictionary<string, MessageData>();
+            _separator = separator;
+            _factory = factory;
+        }
+
+        public Dictionary<string, T> ReadCSV(string fullpathfile)
+        {
+            Dictionary<string, T> csvData = new Dictionary<string, T>();
 
             if (!File.Exists(fullpathfile))
             {
@@ -36,52 +49,53 @@ namespace SpaceMem.Localizer
 
             string[] lines = File.ReadAllLines(fullpathfile);
 
-            //Skipping the header
+            // Skipping the header
             for (int i = 1; i < lines.Length; i++)
             {
                 string line = lines[i];
-                string[] fields = line.Split(new string[] { ";;" }, StringSplitOptions.None);
-                // Make sure each line has exactly 4 fields
-                if (fields.Length != 4)
-                {
-                    Debug.LogError($"Malformed line {i}: {line}");
-                    continue;
-                }
+                string[] fields = line.Split(new string[] { _separator }, StringSplitOptions.None);
 
                 string id = fields[0].Trim();
-                string header = fields[1].Trim();
-                string body = fields[2].Trim();
-                float duration = float.Parse(fields[3]);
 
-                csvData[id] = new MessageData(header, body, duration);
-
+                T messageData = (T)_factory.CreateInstance();
+                messageData.DeserializeMessageData(fields.Skip(1).ToArray());
+                csvData[id] = messageData;
             }
             return csvData;
         }
-        public static void WriteCSV(Dictionary<string, MessageData> data, string filepath)
+
+        public void WriteCSV(Dictionary<string, T> data, string filepath)
         {
             StringBuilder sb = new StringBuilder();
-
-            // Adding header line
-            sb.AppendLine("ID;;Header;;Body;;Duration");
-
-            foreach (KeyValuePair<string, MessageData> item in data)
+            // If the data dictionary is not empty, we'll use the first element to get the header fields
+            if (data.Count > 0)
             {
-                sb.AppendLine(string.Format("{0};;{1};;{2};;{3:F2}", item.Key, item.Value.Header, item.Value.Body, item.Value.Duration));
+                string[] headers = data.First().Value.GetHeaderFields();
+                string headerLine = $"ID{_separator}{string.Join(_separator, headers)}";
+                sb.AppendLine(headerLine);
+            }
+
+            foreach (KeyValuePair<string, T> item in data)
+            {
+                string[] serializedData = item.Value.SerializeMessageData();
+                string serializedLine = string.Join(_separator, serializedData);
+                sb.AppendLine($"{item.Key}{_separator}{serializedLine}");
             }
 
             try
             {
+                Debug.Log(sb.ToString());
                 using (StreamWriter sw = new StreamWriter(filepath))
                 {
+                    
                     sw.Write(sb.ToString());
                 }
             }
             catch (Exception ex)
             {
-                Debug.Log("Error writing CSV: " + ex.Message);
+                Debug.LogError($"Error writing CSV: {ex.Message}");
             }
         }
-    }
 
+    }
 }
