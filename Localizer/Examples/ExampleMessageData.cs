@@ -5,7 +5,7 @@ using SpaceMem.Localizer;
 
 namespace SpaceMem.Localizer.Examples
 {
-    // Define the ALLOMessageData class, which implements IMessageData
+    // Define the Message Data class, which implements IMessageData
     public class ExampleMessageData : IMessageData
     {
         public string Header { get; set; }

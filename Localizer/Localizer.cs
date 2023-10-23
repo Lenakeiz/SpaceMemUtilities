@@ -55,9 +55,7 @@ namespace SpaceMem.Localizer
                 Debug.Log($"Key: {entry.Key}, Message: {entry.Value.ToString()}");
             }
         }
-
     }
-
 }
 
 
