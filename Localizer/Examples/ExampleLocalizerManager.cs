@@ -4,7 +4,6 @@ using UnityEngine;
 using SpaceMem.Localizer;
 using System.IO;
 using SpaceMem.Localizer.Examples;
-using GluonGui.WorkspaceWindow.Views.WorkspaceExplorer;
 
 public class ExampleLocalizerManager : MonoBehaviour
 {
