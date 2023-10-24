@@ -153,4 +153,15 @@ public static class SpaceMemoryExtensions
 
         return child;
     }
+
+    public static string ConvertToCSVString(Vector3 vector)
+    {
+        return $"{vector.x:F2},{vector.y:F2},{vector.z:F2}";
+    }
+
+    public static string ConvertToCSVString(this Quaternion quaternion)
+    {
+        return $"{quaternion.x:F2},{quaternion.y:F2},{quaternion.z:F2},{quaternion.w:F2}";
+    }
+
 }
