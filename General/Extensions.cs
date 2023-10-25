@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -152,6 +153,21 @@ public static class SpaceMemoryExtensions
         }
 
         return child;
+    }
+
+    public static IEnumerable<GameObject> FindGameObjectsInChildrenWithName(this GameObject gameObject, string childName)
+    {
+        var children = gameObject.GetComponentsInChildren<Transform>();
+
+        // Use LINQ to filter GameObjects with the specified name
+        var matchingChildren = children.Where(c => c.gameObject.name == childName).Select(c => c.gameObject).ToList();
+
+        if (matchingChildren.Count == 0)
+        {
+            Debug.LogError($"No GameObjects named '{childName}' found in this GameObject or its children.");
+        }
+
+        return matchingChildren;
     }
 
     public static string ConvertToCSVString(Vector3 vector)
