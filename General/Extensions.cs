@@ -70,6 +70,38 @@ public static class SpaceMemoryExtensions
         transformToMove.position = end;
     }
 
+    public static void LocalLinearLerp(this Transform transformToMove, MonoBehaviour behaviour, float duration, Vector3 targetPosition, AnimationCurve curve)
+    { 
+        behaviour.StartCoroutine(LocalLinearLerpCoroutine(transformToMove, duration, targetPosition, curve));
+    }
+
+    // Coroutine to perform the actual operation
+    private static IEnumerator LocalLinearLerpCoroutine(Transform transformToMove, float duration, Vector3 targetPosition, AnimationCurve curve)
+    {
+        float elapsedTime = 0f;
+        Vector3 originalPosition = transformToMove.localPosition;
+
+        while (elapsedTime < duration)
+        {
+            float timePercent = elapsedTime / duration;
+
+            // Sample the position amount from the animation curve
+            float curveSample = curve.Evaluate(timePercent);
+
+            // Perform the interpolation
+            Vector3 newPosition = Vector3.Lerp(originalPosition, targetPosition, curveSample);
+
+            // Update the position based on the calculated new position
+            transformToMove.localPosition = newPosition;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure the object reaches the exact target position at the end
+        transformToMove.localPosition = targetPosition;
+    }
+
     public static void ShakeAndCollapse(this Transform transformToCollapse, MonoBehaviour behaviour, float duration, float shakeAmount, float verticalDisplacement, AnimationCurve shakeCurve, AnimationCurve collapseCurve)
     {
         behaviour.StartCoroutine(ShakeAndCollapseRoutine(transformToCollapse, duration, shakeAmount, verticalDisplacement, shakeCurve, collapseCurve));
@@ -170,7 +202,7 @@ public static class SpaceMemoryExtensions
         return matchingChildren;
     }
 
-    public static string ConvertToCSVString(Vector3 vector)
+    public static string ConvertToCSVString(this Vector3 vector)
     {
         return $"{vector.x:F2},{vector.y:F2},{vector.z:F2}";
     }

@@ -6,7 +6,6 @@ using SpaceMem.Patterns.Input;
 
 public class KeyMappingsController : MonoBehaviour
 {
-    //Andrea: check if this is too expensive
     [SerializeField]
     private ShortcutKeys _activateFunctionExample = new ShortcutKeys("Activate function", 2)
     {
