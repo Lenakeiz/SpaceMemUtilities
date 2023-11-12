@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace SpaceMem.Encryption
 {
@@ -34,14 +33,52 @@ namespace SpaceMem.Encryption
 
         public byte[] Encrypt(string data)
         {
-            // ... Encryption logic remains the same
-            return null;
+            if (string.IsNullOrEmpty(data))
+            { 
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            byte[] encryptedData;
+
+            ICryptoTransform encryptor = _aes.CreateEncryptor(_aes.Key, _aes.IV);
+
+            using (MemoryStream msEncrypt = new MemoryStream())
+            {
+                using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                {
+                    using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                    {
+                        swEncrypt.Write(data);
+                    }
+                }
+                return msEncrypt.ToArray();
+            }
         }
 
         public string Decrypt(byte[] encryptedData)
         {
-            // ... Decryption logic remains the same
-            return "";
+            if (encryptedData == null || encryptedData.Length <= 0)
+            {
+                throw new ArgumentNullException(nameof(encryptedData));
+            }
+
+            ICryptoTransform decryptor = _aes.CreateDecryptor(_aes.Key, _aes.IV);
+            using (MemoryStream msDecrypt = new MemoryStream(encryptedData))
+            {
+                using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                {
+                    using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                    {
+                        return srDecrypt.ReadToEnd();
+                    }
+                }
+            }
         }
+        // Implement IDisposable to properly dispose of the AES instance
+        public void Dispose()
+        {
+            _aes?.Dispose();
+        }
+
     }
 }
