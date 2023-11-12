@@ -1,0 +1,16 @@
+{
+    "name": "SpaceMem.Encryption.Examples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e102f5c4daf4957438bb4cde4fa5cf95"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

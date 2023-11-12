@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 namespace SpaceMem.Encryption
 {
-    public class AesEncryptor : IEncryptor
+    public class AesEncryptor : IEncryptor, IDisposable
     {
         private readonly byte[] _key;
         private readonly byte[] _iv;
@@ -74,6 +74,7 @@ namespace SpaceMem.Encryption
                 }
             }
         }
+
         // Implement IDisposable to properly dispose of the AES instance
         public void Dispose()
         {
