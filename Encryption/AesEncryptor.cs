@@ -38,10 +38,7 @@ namespace SpaceMem.Encryption
                 throw new ArgumentNullException(nameof(data));
             }
 
-            byte[] encryptedData;
-
             ICryptoTransform encryptor = _aes.CreateEncryptor(_aes.Key, _aes.IV);
-
             using (MemoryStream msEncrypt = new MemoryStream())
             {
                 using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
