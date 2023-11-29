@@ -204,12 +204,12 @@ public static class SpaceMemoryExtensions
 
     public static string ConvertToCSVString(this Vector3 vector)
     {
-        return $"{vector.x:F2},{vector.y:F2},{vector.z:F2}";
+        return $"{vector.x:F4},{vector.y:F4},{vector.z:F4}";
     }
 
     public static string ConvertToCSVString(this Quaternion quaternion)
     {
-        return $"{quaternion.x:F2},{quaternion.y:F2},{quaternion.z:F2},{quaternion.w:F2}";
+        return $"{quaternion.x:F4},{quaternion.y:F4},{quaternion.z:F4},{quaternion.w:F4}";
     }
 
 }
