@@ -64,6 +64,33 @@ namespace SpaceMem.Localizer
             return csvData;
         }
 
+        public Dictionary<string, T> ReadCSV(TextAsset textAsset)
+        {
+            Dictionary<string, T> csvData = new Dictionary<string, T>();
+
+            if (textAsset == null)
+            {
+                Debug.LogError("TextAsset is null");
+                return csvData;
+            }
+
+            string[] lines = textAsset.text.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Skipping the header
+            for (int i = 1; i < lines.Length; i++)
+            {
+                string line = lines[i];
+                string[] fields = line.Split(new string[] { _separator }, StringSplitOptions.None);
+
+                string id = fields[0].Trim();
+
+                T messageData = (T)_factory.CreateInstance();
+                messageData.DeserializeMessageData(fields.Skip(1).ToArray());
+                csvData[id] = messageData;
+            }
+            return csvData;
+        }
+
         public void WriteCSV(Dictionary<string, T> data, string filepath)
         {
             StringBuilder sb = new StringBuilder();

@@ -28,6 +28,14 @@ namespace SpaceMem.Localizer
             PrintAllLocalizedMessages();
 #endif
         }
+        public void LoadLocalizationData(TextAsset textAsset)
+        {
+            CSVParser<IMessageData> parser = new CSVParser<IMessageData>(factory, ";;");
+            LocalizationData = parser.ReadCSV(textAsset);
+#if UNITY_EDITOR
+            PrintAllLocalizedMessages();
+#endif
+        }
 
         public void CreateDefaultLocalizationData(string fullPath, Dictionary<string, IMessageData> defaultData)
         {
