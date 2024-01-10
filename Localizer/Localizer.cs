@@ -13,7 +13,7 @@ namespace SpaceMem.Localizer
         // Assume factory is initialized somewhere, possibly injected
         public IMessageDataFactory factory;
 
-        public Dictionary<string, IMessageData> LocalizationData = new Dictionary<string, IMessageData>();
+        public Dictionary<string, IMessageData> LocalizationData;
 
         public void AssignFactory(IMessageDataFactory newFactory)
         {
@@ -22,6 +22,7 @@ namespace SpaceMem.Localizer
 
         public void LoadLocalizationData(string fullfilepath)
         {
+            LocalizationData = new Dictionary<string, IMessageData>();
             CSVParser<IMessageData> parser = new CSVParser<IMessageData>(factory, ";;");
             LocalizationData = parser.ReadCSV(fullfilepath);
 #if UNITY_EDITOR
@@ -30,6 +31,7 @@ namespace SpaceMem.Localizer
         }
         public void LoadLocalizationData(TextAsset textAsset)
         {
+            LocalizationData = new Dictionary<string, IMessageData>();
             CSVParser<IMessageData> parser = new CSVParser<IMessageData>(factory, ";;");
             LocalizationData = parser.ReadCSV(textAsset);
 #if UNITY_EDITOR
