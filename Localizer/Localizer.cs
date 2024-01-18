@@ -47,6 +47,12 @@ namespace SpaceMem.Localizer
 
         public IMessageData GetMessage(string id)
         {
+            //Guard against attempt to localize before loading the first time the data
+            if (LocalizationData == null)
+            {
+               return null;
+            }
+
             if (LocalizationData.ContainsKey(id))
             {
                 return LocalizationData[id];
