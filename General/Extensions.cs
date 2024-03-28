@@ -137,6 +137,15 @@ public static class SpaceMemoryExtensions
 
     }
 
+    public static bool isPositionedXZ(this Transform transform,  Vector3 targetPosition, float positionAllowance)
+    {
+        // Get the object's current position (ignoring y) and ignore the y component of the target position
+        Vector3 position = new Vector3(transform.position.x, 0, transform.position.z);
+        targetPosition.y = 0;
+
+        return Vector3.Distance(position, targetPosition) <= positionAllowance;
+    }
+
     public static bool IsPositionedAndFacingTowards(this Transform transform, Vector3 targetPosition, Vector3 targetDirection, float positionAllowance, float directionAllowanceDegrees)
     {
         // Get the object's current position (ignoring y)
