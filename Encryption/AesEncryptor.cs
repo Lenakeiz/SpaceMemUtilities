@@ -31,6 +31,18 @@ namespace SpaceMem.Encryption
             _aes.IV = _iv;
         }
 
+        public static void GenerateKeyAndIV(out string base64Key, out string base64IV)
+        {
+            using (Aes aes = Aes.Create())
+            {
+                aes.KeySize = 256;  // Setting key size to 256 bits
+                aes.GenerateKey();
+                aes.GenerateIV();
+                base64Key = Convert.ToBase64String(aes.Key);
+                base64IV = Convert.ToBase64String(aes.IV);
+            }
+        }
+
         public byte[] Encrypt(string data)
         {
             if (string.IsNullOrEmpty(data))
